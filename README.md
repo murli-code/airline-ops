@@ -20,6 +20,54 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Testing
+
+Unit and component tests use [Jest](https://jestjs.io) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/), following the Next.js [Jest guide](https://nextjs.org/docs/app/guides/testing/jest).
+
+### Testing packages
+
+These 9 packages are in `devDependencies`. They are only used during development and testing and are not part of the production build.
+
+#### Test runner
+
+| Package | Purpose |
+| --- | --- |
+| `jest` | Finds and runs test files and reports pass/fail results. |
+| `jest-environment-jsdom` | Gives Jest a simulated browser DOM so React components can be rendered in tests. |
+
+#### Testing Library
+
+| Package | Purpose |
+| --- | --- |
+| `@testing-library/react` | Renders React components inside a test (`render(<Home />)`). |
+| `@testing-library/dom` | Queries rendered output (`screen.getByText`, `screen.getByRole`). Required as a separate install by `@testing-library/react` v16. |
+| `@testing-library/jest-dom` | Adds readable DOM matchers such as `toBeInTheDocument()`, `toBeVisible()` and `toHaveValue()`. |
+| `@testing-library/user-event` | Simulates real user actions such as clicking, typing and tabbing, e.g. for testing the login form. |
+
+#### TypeScript support
+
+| Package | Purpose |
+| --- | --- |
+| `@types/jest` | Type definitions so TypeScript recognises `describe`, `it` and `expect`. |
+| `ts-node` | Lets Jest load a TypeScript config file (`jest.config.ts`). |
+
+### Setup still to do
+
+The packages are installed, but `npm test` will not work until the following are added:
+
+1. `jest.config.ts` in the project root, using `next/jest` with `testEnvironment: 'jsdom'`, `setupFilesAfterEnv: ['<rootDir>/jest.setup.ts']` and a `moduleNameMapper` entry for the `@/*` path alias.
+2. `jest.setup.ts` in the project root, containing `import '@testing-library/jest-dom'`.
+3. `"test": "jest"` and `"test:watch": "jest --watch"` scripts in `package.json`.
+4. A first test in `__tests__/`, for example `__tests__/page.test.tsx`.
+
+Once these are in place, run the tests with:
+
+```bash
+npm test
+```
+
+> **Note:** Jest does not support `async` Server Components. Synchronous Server and Client Components can be unit tested; `async` components need an end-to-end tool such as Playwright.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
